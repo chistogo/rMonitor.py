@@ -8,12 +8,15 @@ import re
 import subprocess
 import threading
 import time
+import requests
 
 class RMonitor:
 
-    def __init__(self,fivSecIntervalsBuffer = None):
+    def __init__(self,fivSecIntervalsBuffer = None, url = None,uuid = None):
 
         self.__howmany = 6
+        self.__url = url
+        self.__uuid = uuid
         try:
             if not(fivSecIntervalsBuffer is None):
                 self.__howmany = fivSecIntervalsBuffer;
@@ -40,6 +43,7 @@ class RMonitor:
         return returnMe
 
     def __threadUpdateHandler(self):
+        lastTime = time.time()
         while True:
             if len(self.__adverageCPUData) != self.__howmany:
                 self.__adverageCPUData.append(RMonitor.getCurrentCPUUsage())
@@ -47,10 +51,13 @@ class RMonitor:
                 self.__adverageCPUData.pop(0)
                 self.__adverageCPUData.append(RMonitor.getCurrentCPUUsage())
             #print(self.__adverageCPUData)
+            if(time.time() - lastTime > 3 and not(self.__url is None)):
+                r = requests.post(url, data={'cpu': getAdvCPU(), 'free': free(), 'totalRam': totalRam(),'usedSpace':usedSpace(),"spaceUsage":spaceUsage(),"uuid":self.__uuid})
+
                 
-            
 
 
+                
     def getCurrentCPUUsage():
         cmd = """top -b -n2 -p 1 | fgrep "Cpu(s)" | tail -1 | awk -F'id,' -v prefix="$prefix" '{ split($1, vs, ","); v=vs[length(vs)]; sub("%", "", v); printf "%s%.1f%%", prefix, 100 - v }' """
         result = subprocess.Popen([cmd],shell=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
@@ -76,5 +83,21 @@ class RMonitor:
         output = re.sub(' +',' ',output).split()
         return(float(output[1]))
         
+    def totalSpace():
+        cmd = """df -h --total | grep total"""
+        result = subprocess.Popen([cmd],shell=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+        return(result.communicate()[0].decode('UTF-8').split()[1])
+
+    def usedSpace():
+        cmd = """df -h --total | grep total"""
+        result = subprocess.Popen([cmd],shell=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+        return(result.communicate()[0].decode('UTF-8').split()[2])
+
+    def spaceUsage():
+        cmd = """df -h --total | grep total"""
+        result = subprocess.Popen([cmd],shell=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+        return(result.communicate()[0].decode('UTF-8').split()[4])
+
+
 
 
