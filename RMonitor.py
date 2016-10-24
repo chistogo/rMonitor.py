@@ -52,7 +52,7 @@ class RMonitor:
                 self.__adverageCPUData.append(RMonitor.getCurrentCPUUsage())
             #print(self.__adverageCPUData)
             if(time.time() - lastTime > 3 and not(self.__url is None)):
-                r = requests.post(url, data={'cpu': getAdvCPU(), 'free': free(), 'totalRam': totalRam(),'usedSpace':usedSpace(),"spaceUsage":spaceUsage(),"uuid":self.__uuid})
+                r = requests.post(self.__url, data={'cpu': getAdvCPU(), 'free': free(), 'totalRam': totalRam(),'usedSpace':usedSpace(),"spaceUsage":spaceUsage(),"uuid":self.__uuid})
 
                 
 
