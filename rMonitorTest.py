@@ -3,17 +3,13 @@
 import time
 from RMonitor import *
 
+uuid = "sercretkey"
+
+
 def main():
-    monitor = RMonitor(6)
+    monitor = RMonitor(6, "http://example.com/handlers/usage.php", uuid)
     while(True):
-        print("Free Ram:", RMonitor.free())
-        print("Totoal Ram:", RMonitor.totalRam())
-        print("Memory Usage:", RMonitor.getMemoryUsage())
-        #print("CPU Usage:", RMonitor.getCurrentCPUUsage())
-        print("Adverage CPU Usage:", monitor.getAdvCPU())
-        print("Disk Total:", RMonitor.totalSpace())
-        print("Disk Usage:", RMonitor.usedSpace())
-        print("Disk Percentage:", RMonitor.spaceUsage())
+        print("waiting...")
         time.sleep(5)
 
 if __name__ == "__main__":
