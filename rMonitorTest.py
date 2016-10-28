@@ -3,11 +3,11 @@
 import time
 from RMonitor import *
 
-uuid = "80c50779d3a7436284f7e526bbbea5d4"
+uuid = "uuidstring"
 
 
 def main():
-    monitor = RMonitor(6, "http://qiime.digibara.com/handlers/usage.php", uuid)
+    monitor = RMonitor(6, "http://example.com/handlers/usage.php", uuid)
     while(True):
        pass
 
