@@ -51,10 +51,11 @@ class RMonitor:
                 self.__adverageCPUData.pop(0)
                 self.__adverageCPUData.append(RMonitor.getCurrentCPUUsage())
             #print(self.__adverageCPUData)
-            if(time.time() - lastTime > 3 and not(self.__url is None)):
-                r = requests.get(self.__url, params={'cpu': self.getAdvCPU(), 'free': free(), 'totalRam': totalRam(),'usedSpace':usedSpace(),"totalSpace":totalSpace(),"uuid":self.__uuid})
+            if(not(self.__url is None)):
+                r = requests.head(self.__url, params={'cpu': self.getAdvCPU(), 'free': free(), 'totalRam': totalRam(),'usedSpace':usedSpace(),"totalSpace":totalSpace(),"uuid":self.__uuid}, headers={'Connection':'close'},allow_redirects=False)
                 print(r.url)
-                
+                r.close()
+            time.sleep(1)
 
 
                 
