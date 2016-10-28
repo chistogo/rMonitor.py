@@ -9,7 +9,7 @@ uuid = "uuidstring"
 def main():
     monitor = RMonitor(6, "http://example.com/handlers/usage.php", uuid)
     while(True):
-       pass
+       time.sleep(3)
 
 if __name__ == "__main__":
     main()
